@@ -76,6 +76,7 @@ object frmMenu: TfrmMenu
       TitleFont.Style = []
       OnCellClick = grdMenuCellClick
       OnDrawColumnCell = grdMenuDrawColumnCell
+      OnKeyDown = grdMenuKeyDown
       Columns = <
         item
           Expanded = False

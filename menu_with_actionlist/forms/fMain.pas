@@ -46,10 +46,12 @@ type
     procedure grdMenuCellClick(Column: TColumn);
     procedure edtSearchKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure grdMenuKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     procedure MenuSearch;
-    procedure PopulaPesquisaMenu(memoryTable: TFDMemTable;
+    procedure GetMenuList(memoryTable: TFDMemTable;
       actionList: TActionList);
     function removeAccents(const s: string): string;
   public
@@ -128,6 +130,15 @@ begin
 
 end;
 
+procedure TfrmMenu.grdMenuKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key = VK_RETURN) then
+  begin
+    MenuSearch;
+  end;
+end;
+
 procedure TfrmMenu.edtSearchChange(Sender: TObject);
 begin
   memMenu.Filtered := False;
@@ -149,11 +160,16 @@ begin
     dtsMenu.DataSet.Next;
   end;
 
+  if (key = VK_RETURN) then
+  begin
+    MenuSearch;
+  end;
+
 end;
 
 procedure TfrmMenu.FormCreate(Sender: TObject);
 begin
-  PopulaPesquisaMenu(memMenu, aclMenu);
+  GetMenuList(memMenu, aclMenu);
 end;
 
 procedure TfrmMenu.MenuSearch;
@@ -162,11 +178,13 @@ begin
   if not (memMenu.IsEmpty) then
   begin
     aclMenu.Actions[memMenu.FieldByName('IndexAction').AsInteger].Execute;
+    edtSearch.Clear;
+    edtSearch.SetFocus;
   end;
 
 end;
 
-procedure TfrmMenu.PopulaPesquisaMenu(memoryTable: TFDMemTable; actionList: TActionList);
+procedure TfrmMenu.GetMenuList(memoryTable: TFDMemTable; actionList: TActionList);
 var
   lIndex: integer;
   lAction: TAction;
